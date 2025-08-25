@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Tone.js Example</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.35/Tone.js"></script>
+</head>
+
+<body>
+
+  <h1>Simple Tone.js Melody</h1>
+  <button onclick="startMusic()">Start Music</button>
+
+  <script>
+    // Define Synths
+    const synth = new Tone.Synth({
+      oscillator: { type: "triangle" }
+    }).toDestination();
+
+    const bassSynth = new Tone.Synth({
+      oscillator: { type: "sawtooth" }
+    }).toDestination();
+
+    // Add Effects
+    const reverb = new Tone.Reverb({
+      decay: 10,       // Increase decay time for a longer reverb tail
+      preDelay: 0.5,   // Delay before the reverb kicks in, making it more noticeable
+      wet: 1           // Set wet level to 1 for a fully affected sound
+    });
+
+    const chorus = new Tone.Chorus({
+      frequency: 1.5,      // Lower frequency for a slower modulation rate
+      delayTime: 4,        // Higher delay time makes the effect more dramatic
+      depth: 0.9,          // Near maximum depth for pronounced detuning
+      spread: 180          // Full stereo spread
+    }).start();
+
+    // Connect effects to synths
+    synth.connect(chorus); // Synth output goes to chorus
+    chorus.connect(reverb); // Chorus output goes to reverb
+
+    chorus.toDestination();
+    reverb.toDestination(); // Reverb output goes to the final audio destination
+
+
+    // Define melody and bass patterns
+    const melodyPattern = new Tone.Pattern((time, note) => {
+      if (note) {
+        synth.triggerAttackRelease(note, "8n", time);
+      }
+    }, ["C4", "E4", "G4", "A4", "G4", "E4", "C4", null]);
+
+
+    const bassPattern = new Tone.Pattern((time, note) => {
+      bassSynth.triggerAttackRelease(note, "4n", time);
+    }, ["C2", "C2", "G2", "A2", "F2", "E2", "D2", "G2"]);
+
+    // Function to start the music
+    function startMusic() {
+      Tone.start(); // Ensure audio context is started
+
+      // Start patterns and Transport
+      melodyPattern.start(0);
+      bassPattern.start(0);
+      Tone.Transport.bpm.value = 120; // Set tempo
+      Tone.Transport.start();
+    }
+  </script>
+
+</body>
+
+</html>
