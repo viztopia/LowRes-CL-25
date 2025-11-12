@@ -41,8 +41,8 @@
     synth.connect(chorus); // Synth output goes to chorus
     chorus.connect(reverb); // Chorus output goes to reverb
 
-    chorus.toDestination();
-    reverb.toDestination(); // Reverb output goes to the final audio destination
+    // chorus.toDestination();
+    // reverb.toDestination(); // Reverb output goes to the final audio destination
 
 
     // Define melody and bass patterns
@@ -63,7 +63,7 @@
 
       // Start patterns and Transport
       melodyPattern.start(0);
-      bassPattern.start(0);
+      // bassPattern.start(0);
       Tone.Transport.bpm.value = 120; // Set tempo
       Tone.Transport.start();
     }
